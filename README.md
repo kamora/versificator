@@ -20,17 +20,11 @@ authenticated users.
 
 ## Install
 
-The package is private and not on pub.dev. Add it as a git dependency pinned to a tag:
-
-```yaml
-dependencies:
-  versificator:
-    git:
-      url: git@github.com:<owner>/versificator.git
-      ref: v1.0.3
+```
+flutter pub add versificator
 ```
 
-`flutter pub get` needs SSH access to the repository.
+The app needs Firebase set up with Firestore and anonymous authentication enabled.
 
 ## Use
 
@@ -46,11 +40,10 @@ Future<void> checkForUpdate() async {
   }
 
   // Show a dialog for update.version. A required update offers only the store;
-  // a recommended one also offers "Later":
-  if (!update.required) {
-    await versificator.postpone(update);
-  }
+  // a recommended one also offers "Later", which calls later(update).
 }
+
+Future<void> later(Update update) => versificator.postpone(update);
 ```
 
 - `check()` returns an `Update` (`version`, `required`) or null. It also returns null when the read fails, takes
@@ -62,6 +55,7 @@ Future<void> checkForUpdate() async {
 ## Release
 
 1. Run `flutter analyze` and `flutter test`.
-2. Bump `version` in `pubspec.yaml` and commit.
-3. Tag and push: `git tag v1.0.4 && git push origin main v1.0.4`.
-4. In each app, change `ref` to the new tag, run `flutter pub get`, and commit `pubspec.yaml` with `pubspec.lock`.
+2. Bump `version` in `pubspec.yaml`, add its entry to `CHANGELOG.md`, and commit.
+3. Run `dart pub publish --dry-run`; it must report no issues.
+4. Tag and push: `git tag v1.0.5 && git push origin main v1.0.5`.
+5. Publish: `dart pub publish`.
