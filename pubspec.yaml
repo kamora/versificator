@@ -1,6 +1,6 @@
 name: versificator
 description: Checks a Flutter app's version against Firestore and tells it whether an update is required or recommended.
-version: 1.0.2
+version: 1.0.3
 publish_to: none
 
 environment:

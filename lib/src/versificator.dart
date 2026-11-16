@@ -16,7 +16,7 @@ typedef Update = ({String version, bool required});
 class Versificator {
   Versificator(this.path, {this.interval = const Duration(hours: 3), this.timeout = const Duration(seconds: 30)});
 
-  /// The document, such as `versions/price-advice`.
+  /// The document, such as `versions/<app>`.
   final String path;
 
   /// How long after a successful read [check] answers null without reading again.

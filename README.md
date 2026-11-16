@@ -27,7 +27,7 @@ dependencies:
   versificator:
     git:
       url: git@github.com:<owner>/versificator.git
-      ref: v1.0.2
+      ref: v1.0.3
 ```
 
 `flutter pub get` needs SSH access to the repository.
@@ -63,5 +63,5 @@ Future<void> checkForUpdate() async {
 
 1. Run `flutter analyze` and `flutter test`.
 2. Bump `version` in `pubspec.yaml` and commit.
-3. Tag and push: `git tag v1.0.3 && git push origin main v1.0.3`.
+3. Tag and push: `git tag v1.0.4 && git push origin main v1.0.4`.
 4. In each app, change `ref` to the new tag, run `flutter pub get`, and commit `pubspec.yaml` with `pubspec.lock`.
