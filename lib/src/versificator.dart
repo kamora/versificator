@@ -89,7 +89,15 @@ class Versificator {
     }
 
     final version = recommended.parts;
-    return version.after(current) && version.after(postponed.parts) ? (version: recommended, required: false) : null;
+    if (!version.after(current)) {
+      return null;
+    }
+
+    if (!version.after(postponed.parts)) {
+      return null;
+    }
+
+    return (version: recommended, required: false);
   }
 }
 
@@ -97,7 +105,19 @@ extension on String? {
   /// The three numbers of this version, or null when it is missing or has another shape.
   List<int>? get parts {
     final numbers = this?.split('.').map(int.tryParse).toList();
-    return numbers != null && numbers.length == 3 && !numbers.contains(null) ? numbers.cast<int>() : null;
+    if (numbers == null) {
+      return null;
+    }
+
+    if (numbers.length != 3) {
+      return null;
+    }
+
+    if (numbers.contains(null)) {
+      return null;
+    }
+
+    return numbers.cast<int>();
   }
 }
 
