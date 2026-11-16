@@ -73,13 +73,13 @@ class Versificator {
   /// for nothing.
   @visibleForTesting
   static Update? evaluate(Map<String, dynamic>? data, String installed, String? postponed) {
-    final current = _parse(installed);
+    final current = installed.parts;
     if (data == null || current == null) {
       return null;
     }
 
     final required = data['required'];
-    if (required is String && _later(_parse(required), current)) {
+    if (required is String && required.parts.after(current)) {
       return (version: required, required: true);
     }
 
@@ -88,21 +88,23 @@ class Versificator {
       return null;
     }
 
-    final version = _parse(recommended);
-    return _later(version, current) && _later(version, _parse(postponed))
-        ? (version: recommended, required: false)
-        : null;
+    final version = recommended.parts;
+    return version.after(current) && version.after(postponed.parts) ? (version: recommended, required: false) : null;
   }
+}
 
-  /// The three numbers of [version], or null when it is missing or has another shape.
-  static List<int>? _parse(String? version) {
-    final parts = version?.split('.').map(int.tryParse).toList();
-    return parts != null && parts.length == 3 && !parts.contains(null) ? parts.cast<int>() : null;
+extension on String? {
+  /// The three numbers of this version, or null when it is missing or has another shape.
+  List<int>? get parts {
+    final numbers = this?.split('.').map(int.tryParse).toList();
+    return numbers != null && numbers.length == 3 && !numbers.contains(null) ? numbers.cast<int>() : null;
   }
+}
 
-  /// Whether [a] is later than [b]. A malformed [a] never is; any version is later than a malformed [b].
-  static bool _later(List<int>? a, List<int>? b) {
-    if (a == null) {
+extension on List<int>? {
+  /// Whether this version is later than [b]. A malformed one never is; any version is later than a malformed [b].
+  bool after(List<int>? b) {
+    if (this == null) {
       return false;
     }
 
@@ -111,8 +113,8 @@ class Versificator {
     }
 
     for (var i = 0; i < 3; i++) {
-      if (a[i] != b[i]) {
-        return a[i] > b[i];
+      if (this![i] != b[i]) {
+        return this![i] > b[i];
       }
     }
 
